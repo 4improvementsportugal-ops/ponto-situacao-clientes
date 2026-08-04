@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ponto de Situação — Clientes</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23111'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --paper: #ffffff;
+    --ink: #111111;
+    --muted: #595959;
+    --line: #d4d4d4;
+    --wash: #f2f2f2;
+    --chip-ink: #ffffff;
+    --hatch-a: #ffffff;
+    --hatch-b: #dcdcdc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131313;
+      --ink: #f0f0f0;
+      --muted: #9e9e9e;
+      --line: #3a3a3a;
+      --wash: #1d1d1d;
+      --chip-ink: #131313;
+      --hatch-a: #131313;
+      --hatch-b: #3f3f3f;
+    }
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .page {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 56px 28px 72px;
+  }
+
+  .mono {
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  /* ---------- masthead ---------- */
+  .eyebrow {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  h1 {
+    font-family: "Arial Black", "Segoe UI Black", Arial, sans-serif;
+    font-size: clamp(28px, 5vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .dateline {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 32px;
+  }
+
+  /* ---------- stats ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--line);
+  }
+  .stat {
+    padding: 18px 16px 16px;
+    border-left: 1px solid var(--line);
+  }
+  .stat:first-child { border-left: none; padding-left: 0; }
+  .stat b {
+    display: block;
+    font-family: "Arial Black", "Segoe UI Black", Arial, sans-serif;
+    font-size: 34px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat span {
+    display: block;
+    margin-top: 6px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(3) { border-left: none; padding-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+  }
+
+  /* ---------- legend ---------- */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    align-items: center;
+    padding: 16px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .legend .item { display: flex; align-items: center; gap: 8px; }
+
+  /* ---------- chips ---------- */
+  .chip {
+    display: inline-block;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 8px 3px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .chip.on {
+    background: var(--ink);
+    color: var(--chip-ink);
+    border: 1px solid var(--ink);
+  }
+  .chip.pend {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .chip.miss {
+    background: repeating-linear-gradient(135deg, var(--hatch-a) 0 3px, var(--hatch-b) 3px 5px);
+    color: var(--ink);
+    border: 1px solid var(--muted);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .none { color: var(--muted); }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 48px; }
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 8px;
+  }
+  .sec-num {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .sec-head h2 {
+    font-family: "Arial Black", "Segoe UI Black", Arial, sans-serif;
+    font-size: 17px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin: 0;
+    flex: 1;
+  }
+  .sec-count {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .sec-action {
+    margin: 10px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 70ch;
+  }
+  .sec-action strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- tables ---------- */
+  .tablewrap { overflow-x: auto; margin-top: 14px; }
+  table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+  }
+  th {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: normal;
+    text-align: left;
+    padding: 8px 14px 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  td {
+    padding: 9px 14px 9px 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  td.client {
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  td .note {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  th.c1, td.c1 { width: 22%; }
+  th.c2, td.c2 { width: 24%; }
+  th.c3, td.c3 { width: 20%; }
+  th.c4, td.c4 { width: 34%; }
+
+  /* ---------- footer ---------- */
+  footer {
+    margin-top: 56px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">4Improvements · Gestão de Tráfego</p>
+    <h1>Ponto de Situação dos Clientes</h1>
+    <p class="dateline">Atualizado · 04 Ago 2026 · Para a equipa</p>
+
+    <div class="stats">
+      <div class="stat"><b>27</b><span>Clientes</span></div>
+      <div class="stat"><b>16</b><span>Campanhas por fazer</span></div>
+      <div class="stat"><b>15</b><span>Simuladores por construir</span></div>
+      <div class="stat"><b>15</b><span>Aguardam criativos</span></div>
+    </div>
+
+    <div class="legend">
+      <div class="item"><span class="chip on">A decorrer</span></div>
+      <div class="item"><span class="chip pend">Campanha por fazer</span></div>
+      <div class="item"><span class="chip miss">Por produzir / em falta</span></div>
+    </div>
+  </header>
+
+  <!-- 01 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>Pendentes — sem campanha ativa</h2>
+      <span class="sec-count">2 clientes</span>
+    </div>
+    <p class="sec-action"><strong>Ainda pendentes.</strong> As campanhas de imóvel + simulador estão por fazer e estes clientes não têm nenhuma campanha a decorrer. Falta construir o simulador e montar as campanhas.</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="c1">Cliente</th><th class="c2">Campanha ativa</th><th class="c3">Campanha por fazer</th><th class="c4">Precisa de Criativos</th></tr>
+        <tr><td class="client c1">Anna Vintoniak</td><td class="c2"><span class="chip miss">Nenhuma</span></td><td class="c3"><div class="chips"><span class="chip pend">Imóvel</span><span class="chip pend">Simulador</span></div></td><td class="c4"><span class="chip miss">Simulador · construir</span></td></tr>
+        <tr><td class="client c1">Paulo Matos</td><td class="c2"><span class="chip miss">Nenhuma</span></td><td class="c3"><div class="chips"><span class="chip pend">Imóvel</span><span class="chip pend">Simulador</span></div></td><td class="c4"><span class="chip miss">Simulador · construir</span><span class="note">Criativos prontos (imóvel + simulador)</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>Campanhas por fazer — simulador e/ou criativos</h2>
+      <span class="sec-count">14 clientes</span>
+    </div>
+    <p class="sec-action"><strong>Ação: fazer as campanhas.</strong> Em todos os que têm «Simulador» por fazer, o próprio simulador também tem de ser construído, além dos criativos assinalados. A exceção é a Urban Dinosaur: não precisa de criativos nem de simulador — falta apenas montar a campanha das duas motas novas.</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="c1">Cliente</th><th class="c2">Campanha ativa</th><th class="c3">Campanha por fazer</th><th class="c4">Precisa de Criativos</th></tr>
+        <tr><td class="client c1">Vitor Pereira</td><td class="c2"><span class="chip miss">Nenhuma</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">Gonçalo Vieira</td><td class="c2"><span class="chip miss">Nenhuma</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">Jorge Pimentel</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. imóvel</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">AP. Imobiliária</td><td class="c2"><div class="chips"><span class="chip on">Imóvel</span><span class="chip on">Impulsion.</span><span class="chip on">Recrutam.</span></div></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. imóvel</span><span class="chip miss">Criat. simulador</span><span class="chip miss">Criat. recrutam.</span></div></td></tr>
+        <tr><td class="client c1">Hallstar</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">JH Neves</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">G4 Remax</td><td class="c2"><span class="chip on">Recrutam.</span></td><td class="c3"><div class="chips"><span class="chip pend">Imóvel</span><span class="chip pend">Simulador</span></div></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. imóvel</span><span class="chip miss">Criat. simulador</span><span class="chip miss">Criat. recrutam.</span></div></td></tr>
+        <tr><td class="client c1">ERA Benfica</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. imóvel</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">Equipa Soares</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. imóvel</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">SA Team</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. imóvel</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">HM Team</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">Viver nas Ondas</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">Ricardo Sousa</td><td class="c2"><span class="chip on">Imóvel</span></td><td class="c3"><span class="chip pend">Simulador</span></td><td class="c4"><div class="chips"><span class="chip miss">Simulador · construir</span><span class="chip miss">Criat. simulador</span></div></td></tr>
+        <tr><td class="client c1">Urban Dinosaur</td><td class="c2"><span class="chip on">Ativa</span></td><td class="c3"><span class="chip pend">2 motas novas</span><span class="note">Anunciar duas motas novas</span></td><td class="c4"><span class="none">—</span><span class="note">Não precisa de criativos nem de simulador</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>Só criativos em falta</h2>
+      <span class="sec-count">2 clientes</span>
+    </div>
+    <p class="sec-action"><strong>Ação: tratar da produção de criativos.</strong> As campanhas estão a decorrer e não há campanhas por fazer — falta apenas material.</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="c1">Cliente</th><th class="c2">Campanha ativa</th><th class="c3">Campanha por fazer</th><th class="c4">Precisa de Criativos</th></tr>
+        <tr><td class="client c1">Adilson Reis</td><td class="c2"><div class="chips"><span class="chip on">Imóvel</span><span class="chip on">Simulador</span></div></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="chip miss">Criat. imóvel</span></td></tr>
+        <tr><td class="client c1">Clínica Central</td><td class="c2"><span class="chip on">Ativa</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="chip miss">Vídeos novos</span><span class="note">Feitos pelo próprio cliente — aguardar entrega</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2>Sem próxima ação definida</h2>
+      <span class="sec-count">2 clientes</span>
+    </div>
+    <p class="sec-action"><strong>Ação: definir o próximo passo com o cliente.</strong> Sem campanha ativa, sem campanhas por fazer e sem pedidos de criativos — estão parados.</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="c1">Cliente</th><th class="c2">Campanha ativa</th><th class="c3">Campanha por fazer</th><th class="c4">Precisa de Criativos</th></tr>
+        <tr><td class="client c1">Próprio T</td><td class="c2"><span class="chip miss">Nenhuma</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+        <tr><td class="client c1">Ofício Carpintaria</td><td class="c2"><span class="chip miss">Nenhuma</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2>Em dia</h2>
+      <span class="sec-count">7 clientes</span>
+    </div>
+    <p class="sec-action"><strong>Ação: apenas acompanhamento.</strong> Campanhas a decorrer, sem campanhas por fazer nem criativos em falta.</p>
+    <div class="tablewrap">
+      <table>
+        <tr><th class="c1">Cliente</th><th class="c2">Campanha ativa</th><th class="c3">Campanha por fazer</th><th class="c4">Precisa de Criativos</th></tr>
+        <tr><td class="client c1">NewBroker Master</td><td class="c2"><span class="chip on">Simulador</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+        <tr><td class="client c1">João&amp;Helena</td><td class="c2"><div class="chips"><span class="chip on">Imóvel</span><span class="chip on">Simulador</span></div></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+        <tr><td class="client c1">Naiany&amp;Rui</td><td class="c2"><span class="chip on">Simulador</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+        <tr><td class="client c1">Dental Fixe</td><td class="c2"><span class="chip on">Ativa</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+        <tr><td class="client c1">Cardeira&amp;Costa</td><td class="c2"><span class="chip on">Simulador</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+        <tr><td class="client c1">4Improvements</td><td class="c2"><span class="chip on">Ativa</span></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+        <tr><td class="client c1">Feel Your Home</td><td class="c2"><div class="chips"><span class="chip on">Imóvel</span><span class="chip on">Simulador</span></div></td><td class="c3"><span class="none">—</span></td><td class="c4"><span class="none">—</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer>Fonte: tabela de gestão de clientes · 27 clientes · 04 Ago 2026</footer>
+</div>
+
+</body>
+</html>
