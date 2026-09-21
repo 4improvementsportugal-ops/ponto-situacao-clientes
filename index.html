@@ -155,6 +155,10 @@
     color: var(--ink);
     border: 1px dashed var(--ink);
   }
+  .chip.stop.urg {
+    border: 2px dashed var(--ink);
+    font-weight: 700;
+  }
   .chips { display: flex; flex-wrap: wrap; gap: 5px; }
   .none { color: var(--muted); }
 
@@ -336,14 +340,14 @@
       <h2>Contas paradas — pausadas / sem saldo</h2>
       <span class="sec-count">10 clientes</span>
     </div>
-    <p class="sec-action"><strong>Ação: desbloquear conforme o motivo de cada caso.</strong> Na Viver nas Ondas o cliente não quer prosseguir com o simulador. No Gonçalo Vieira há uma campanha de simulador pendente bloqueada enquanto a conta estiver pausada.</p>
+    <p class="sec-action"><strong>Ação: desbloquear conforme o motivo de cada caso.</strong> <strong>Urgente resolver o saldo na Feel Your Home, Hallstar e Viver nas Ondas.</strong> Na Viver nas Ondas o cliente não quer prosseguir com o simulador. No Gonçalo Vieira há uma campanha de simulador pendente bloqueada enquanto a conta estiver pausada.</p>
     <div class="tablewrap">
       <table>
         <tr><th class="c1">Cliente</th><th class="c2">Campanha pendente</th><th class="c3">Estado da conta</th></tr>
-        <tr><td class="client c1">João&amp;Helena</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop">Sem saldo</span></td></tr>
-        <tr><td class="client c1">Hallstar</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop">Sem saldo</span></td></tr>
-        <tr><td class="client c1">Viver nas Ondas</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop">Sem saldo</span><span class="note">O cliente não quer prosseguir com o simulador.</span></td></tr>
-        <tr><td class="client c1">Feel Your Home</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop">Sem saldo</span></td></tr>
+        <tr><td class="client c1">João&amp;Helena</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop">Sem saldo</span><span class="note">Apenas a conta da Helena está sem saldo.</span></td></tr>
+        <tr><td class="client c1">Hallstar</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop urg">Sem saldo · urgente</span></td></tr>
+        <tr><td class="client c1">Viver nas Ondas</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop urg">Sem saldo · urgente</span><span class="note">O cliente não quer prosseguir com o simulador.</span></td></tr>
+        <tr><td class="client c1">Feel Your Home</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop urg">Sem saldo · urgente</span></td></tr>
         <tr><td class="client c1">JH Neves</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop">Pausada</span></td></tr>
         <tr><td class="client c1">Gonçalo Vieira</td><td class="c2"><span class="chip pend">Simulador</span></td><td class="c3"><span class="chip stop">Pausada · pedido do cliente</span></td></tr>
         <tr><td class="client c1">Próprio T</td><td class="c2"><span class="none">—</span></td><td class="c3"><span class="chip stop">Pausada · pedido do cliente</span></td></tr>
